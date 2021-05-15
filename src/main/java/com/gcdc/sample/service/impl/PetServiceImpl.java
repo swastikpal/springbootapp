@@ -88,8 +88,21 @@ public class PetServiceImpl implements PetService {
 
 	@Override
 	public Pet addPet(Pet pet) {
-
+		
+		//convertToPetDTO(pet);
+		petDao.save(convertToPetDTO(pet));
 		return pet;
+	}
+
+	private com.gcdc.sample.dao.model.Pet convertToPetDTO(Pet pet) {
+		com.gcdc.sample.dao.model.Pet petDto = new com.gcdc.sample.dao.model.Pet();
+		petDto.setId(pet.getId());
+		petDto.setCategory(pet.getCategory().getName());
+		petDto.setName(pet.getName());
+		petDto.setStatus(pet.getStatus().toString());
+		petDto.setTag(pet.getTags().get(0).getName());
+		return petDto;
+		
 	}
 
 	@Override

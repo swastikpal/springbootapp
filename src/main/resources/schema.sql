@@ -29,7 +29,7 @@ CREATE TABLE pet (
  );
  
 INSERT INTO pet (id, name, status, category, tag) VALUES
-(1, 'Tom', 'Available', 'cat', 'tag1'),
-(2, 'Tucker', 'Available', 'dog', 'tag2'),
-(3, 'Maxine', 'Available', 'dog', 'tag2'),
-(4, 'Nala', 'Sold', 'dog', 'tag2');
+(1, 'Tom', 'available', 'cat', 'tag1'),
+(2, 'Tucker', 'available', 'dog', 'tag2'),
+(3, 'Maxine', 'available', 'dog', 'tag2'),
+(4, 'Nala', 'sold', 'dog', 'tag2');

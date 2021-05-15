@@ -25,7 +25,7 @@ public class PetDataAccessLayerImpl implements PetDataAccessLayer {
 
 	@Override
 	public Pet save(Pet pet) {
-		
+		jdbcTemplate.update("INSERT INTO PET (id, name, status, category, tag) VALUES (?, ?, ?, ?, ?)", new Object[] {pet.getId(), pet.getName(), pet.getStatus(), pet.getCategory(), pet.getTag()});
 		return pet;
 	}
 

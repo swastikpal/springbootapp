@@ -16,16 +16,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.request.NativeWebRequest;
 
-import com.gcdc.openapi.api.PetApi;
 import com.gcdc.openapi.model.ModelApiResponse;
 import com.gcdc.openapi.model.Pet;
 import com.gcdc.sample.service.PetService;
 
 @Controller
-public class PetController implements PetApi {
-
-	@Autowired
-	private NativeWebRequest request;
+public class PetController {
 
 	@Autowired
 	private PetService petService;
@@ -35,7 +31,7 @@ public class PetController implements PetApi {
 	 * @param body
 	 * @return
 	 */
-	@PostMapping(value = "/pet/add", consumes = { "application/json", "application/xml" })
+	@PostMapping(value = "/addnewpet", consumes = { "application/json", "application/xml" })
 	public ResponseEntity<Pet> addNewPet(@Valid @RequestBody(required = true) Pet body) {
 		petService.addPet(body);
 		return new ResponseEntity<>(body, HttpStatus.OK);
