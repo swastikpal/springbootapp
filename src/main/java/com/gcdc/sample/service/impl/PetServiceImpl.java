@@ -22,24 +22,10 @@ public class PetServiceImpl implements PetService {
 	@Override
 	public Pet getPet(Long id) {
 		com.gcdc.sample.dao.model.Pet petRow = petDao.getPetInformation(id);
-		Pet responsePet = convertToPetVO(petRow);
-		/*
-		 * responsePet.setId(petRow.getId()); responsePet.setName(petRow.getName());
-		 * 
-		 * if (petRow.getStatus().equalsIgnoreCase(StatusEnum.AVAILABLE.toString())) {
-		 * responsePet.setStatus(StatusEnum.AVAILABLE); } else if
-		 * (petRow.getStatus().equalsIgnoreCase(StatusEnum.PENDING.toString())) {
-		 * responsePet.setStatus(StatusEnum.PENDING); } else if
-		 * (petRow.getStatus().equalsIgnoreCase(StatusEnum.SOLD.toString())) {
-		 * responsePet.setStatus(StatusEnum.SOLD); }
-		 * 
-		 * Category cat = new Category(); cat.setId(1L);
-		 * cat.setName(petRow.getCategory()); responsePet.setCategory(cat);
-		 * 
-		 * List<Tag> tags = new ArrayList<Tag>(); tags.add(new
-		 * Tag().id(1L).name(petRow.getTag())); responsePet.setTags(tags);
-		 */
-
+		Pet responsePet = null;
+		if (petRow != null) {
+			responsePet = convertToPetVO(petRow);
+		}
 		return responsePet;
 	}
 
@@ -51,15 +37,31 @@ public class PetServiceImpl implements PetService {
 		return pets;
 	}
 
-	private List<Pet> convertToPetVOList(List<com.gcdc.sample.dao.model.Pet> petbyStatus) {
-		List<Pet> pets = new ArrayList<Pet>();
+	@Override
+	public Pet addPet(Pet pet) {
+		petDao.save(convertToPetDTO(pet));
+		return pet;
+	}
 
-		petbyStatus.forEach(petRow -> {
-			Pet responsePet = convertToPetVO(petRow);
-			pets.add(responsePet);
+	@Override
+	public int getRowCount(String table) {
+		return petDao.count(table);
+	}
 
-		});
-		return pets;
+	@Override
+	public int deletePet(Long petId) {
+		return petDao.deletePet(petId);
+	}
+
+	private com.gcdc.sample.dao.model.Pet convertToPetDTO(Pet pet) {
+		com.gcdc.sample.dao.model.Pet petDto = new com.gcdc.sample.dao.model.Pet();
+		petDto.setId(pet.getId());
+		petDto.setCategory(pet.getCategory().getName());
+		petDto.setName(pet.getName());
+		petDto.setStatus(pet.getStatus().toString());
+		petDto.setTag(pet.getTags().get(0).getName());
+		return petDto;
+
 	}
 
 	private Pet convertToPetVO(com.gcdc.sample.dao.model.Pet petRow) {
@@ -67,11 +69,11 @@ public class PetServiceImpl implements PetService {
 		responsePet.setId(petRow.getId());
 		responsePet.setName(petRow.getName());
 
-		if (petRow.getStatus().equalsIgnoreCase(StatusEnum.AVAILABLE.toString())) {
+		if (StatusEnum.AVAILABLE.toString().equalsIgnoreCase(petRow.getStatus())) {
 			responsePet.setStatus(StatusEnum.AVAILABLE);
-		} else if (petRow.getStatus().equalsIgnoreCase(StatusEnum.PENDING.toString())) {
+		} else if (StatusEnum.PENDING.toString().equalsIgnoreCase(petRow.getStatus())) {
 			responsePet.setStatus(StatusEnum.PENDING);
-		} else if (petRow.getStatus().equalsIgnoreCase(StatusEnum.SOLD.toString())) {
+		} else if (StatusEnum.SOLD.toString().equalsIgnoreCase(petRow.getStatus())) {
 			responsePet.setStatus(StatusEnum.SOLD);
 		}
 
@@ -86,28 +88,15 @@ public class PetServiceImpl implements PetService {
 		return responsePet;
 	}
 
-	@Override
-	public Pet addPet(Pet pet) {
-		
-		//convertToPetDTO(pet);
-		petDao.save(convertToPetDTO(pet));
-		return pet;
-	}
+	private List<Pet> convertToPetVOList(List<com.gcdc.sample.dao.model.Pet> petbyStatus) {
+		List<Pet> pets = new ArrayList<Pet>();
 
-	private com.gcdc.sample.dao.model.Pet convertToPetDTO(Pet pet) {
-		com.gcdc.sample.dao.model.Pet petDto = new com.gcdc.sample.dao.model.Pet();
-		petDto.setId(pet.getId());
-		petDto.setCategory(pet.getCategory().getName());
-		petDto.setName(pet.getName());
-		petDto.setStatus(pet.getStatus().toString());
-		petDto.setTag(pet.getTags().get(0).getName());
-		return petDto;
-		
-	}
+		petbyStatus.forEach(petRow -> {
+			Pet responsePet = convertToPetVO(petRow);
+			pets.add(responsePet);
 
-	@Override
-	public int getRowCount(String table) {
-		return petDao.count(table);
+		});
+		return pets;
 	}
 
 }

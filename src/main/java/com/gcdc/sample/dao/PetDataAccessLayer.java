@@ -13,4 +13,6 @@ public interface PetDataAccessLayer {
 	public int count(String table);
 	
 	public List<Pet> getPetbyStatus(String status);
+	
+	public int deletePet(Long petId);
 }

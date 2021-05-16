@@ -13,5 +13,7 @@ public interface PetService {
 	public Pet addPet(Pet pet);
 	
 	public int getRowCount(String table);
+	
+	public int deletePet(Long petId);
 
 }

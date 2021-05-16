@@ -19,25 +19,40 @@ public class PetDataAccessLayerImpl implements PetDataAccessLayer {
 
 	@Override
 	public Pet getPetInformation(Long id) {
-		Pet pet = jdbcTemplate.queryForObject("SELECT * FROM PET WHERE id = ?", new PetMapper(), new Object[] {id});
+		Pet pet = null;
+		try {
+			pet = jdbcTemplate.queryForObject("SELECT * FROM PET WHERE id = ?", new PetMapper(), new Object[] {id});
+		} catch (Exception e) {
+			pet = null;
+		}
 		return pet;
 	}
 
 	@Override
 	public Pet save(Pet pet) {
-		jdbcTemplate.update("INSERT INTO PET (id, name, status, category, tag) VALUES (?, ?, ?, ?, ?)", new Object[] {pet.getId(), pet.getName(), pet.getStatus(), pet.getCategory(), pet.getTag()});
+		try {
+			jdbcTemplate.update("INSERT INTO PET (id, name, status, category, tag) VALUES (?, ?, ?, ?, ?)", new Object[] {pet.getId(), pet.getName(), pet.getStatus(), pet.getCategory(), pet.getTag()});
+		} catch (Exception e) {
+			System.out.println("Could not save record");
+		}
 		return pet;
 	}
 
 	@Override
 	public int count(String table) {
-		return jdbcTemplate.queryForObject("SELECT COUNT(*) from PET", Integer.class);
+		return jdbcTemplate.queryForObject("SELECT COUNT(*) from " + table, Integer.class);
 	}
 
 	@Override
 	public List<Pet> getPetbyStatus(String status) {
 		List<Pet> petByStatus = jdbcTemplate.query("SELECT * FROM PET WHERE status = ?", new PetMapper(), new Object[] {status});
 		return petByStatus;
+	}
+	
+	@Override
+	public int deletePet(Long petId) {
+		int deleteCount = jdbcTemplate.update("DELETE FROM PET WHERE id = ?", new Object[] {petId});
+		return deleteCount;
 	}
 
 }
