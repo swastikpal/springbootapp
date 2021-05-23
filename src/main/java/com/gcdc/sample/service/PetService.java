@@ -10,10 +10,10 @@ public interface PetService {
 	
 	public List<Pet> getPetByStatus(String status);
 	
-	public Pet addPet(Pet pet);
+	public void addPet(Pet pet) throws Exception;
 	
 	public int getRowCount(String table);
 	
-	public int deletePet(Long petId);
+	public void deletePet(Long petId);
 
 }

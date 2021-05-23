@@ -29,11 +29,11 @@ public class PetDataAccessLayerImpl implements PetDataAccessLayer {
 	}
 
 	@Override
-	public Pet save(Pet pet) {
+	public Pet save(Pet pet) throws Exception {
 		try {
 			jdbcTemplate.update("INSERT INTO PET (id, name, status, category, tag) VALUES (?, ?, ?, ?, ?)", new Object[] {pet.getId(), pet.getName(), pet.getStatus(), pet.getCategory(), pet.getTag()});
 		} catch (Exception e) {
-			System.out.println("Could not save record");
+			throw e;
 		}
 		return pet;
 	}
@@ -50,9 +50,12 @@ public class PetDataAccessLayerImpl implements PetDataAccessLayer {
 	}
 	
 	@Override
-	public int deletePet(Long petId) {
-		int deleteCount = jdbcTemplate.update("DELETE FROM PET WHERE id = ?", new Object[] {petId});
-		return deleteCount;
+	public void deletePet(Long petId) {
+		try {
+			jdbcTemplate.update("DELETE FROM PET WHERE id = ?", new Object[] {petId});
+		} catch (Exception e) {
+			throw e;
+		}
 	}
 
 }

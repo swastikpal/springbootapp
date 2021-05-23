@@ -38,9 +38,8 @@ public class PetServiceImpl implements PetService {
 	}
 
 	@Override
-	public Pet addPet(Pet pet) {
+	public void addPet(Pet pet) throws Exception {
 		petDao.save(convertToPetDTO(pet));
-		return pet;
 	}
 
 	@Override
@@ -49,8 +48,13 @@ public class PetServiceImpl implements PetService {
 	}
 
 	@Override
-	public int deletePet(Long petId) {
-		return petDao.deletePet(petId);
+	public void deletePet(Long petId) {
+		try {
+			petDao.deletePet(petId);
+		} catch (Exception e) {
+			throw e;
+		}
+		
 	}
 
 	private com.gcdc.sample.dao.model.Pet convertToPetDTO(Pet pet) {
