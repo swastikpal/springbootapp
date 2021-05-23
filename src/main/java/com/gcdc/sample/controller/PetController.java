@@ -117,17 +117,6 @@ public class PetController extends PetApiController {
 
 	}
 
-	@PostMapping(value = "/pet/uploadImage/{petId}", produces = { "application/json" }, consumes = {
-			"multipart/form-data" })
-	public ResponseEntity<ModelApiResponse> uploadFile(
-			@ApiParam(value = "ID of pet to update", required = true) @PathVariable("petId") Long petId,
-			@ApiParam(value = "Additional data to pass to server") @Valid @RequestPart(value = "additionalMetadata", required = false) String additionalMetadata,
-			@ApiParam(value = "file to upload") @Valid @RequestPart(value = "file", required = false) MultipartFile file) {
-		
-		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-
-	}
-
 	/**
 	 * Generic method to validate database connectivity
 	 * 
