@@ -3,6 +3,8 @@ package com.gcdc.sample.service;
 import java.util.List;
 
 import com.gcdc.openapi.model.Pet;
+import com.gcdc.sample.dao.model.Fare;
+import com.gcdc.sample.dao.model.TaxiRide;
 
 public interface PetService {
 	
@@ -15,5 +17,7 @@ public interface PetService {
 	public int getRowCount(String table);
 	
 	public void deletePet(Long petId);
+	
+	public Long calculateFare(TaxiRide taxiRide, Fare rideFare);
 
 }
