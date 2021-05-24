@@ -8,11 +8,11 @@ public interface PetDataAccessLayer {
 	
 	public Pet getPetInformation(Long id);
 	
-	public Pet save(Pet pet);
+	public Pet save(Pet pet) throws Exception;
 	
 	public int count(String table);
 	
 	public List<Pet> getPetbyStatus(String status);
 	
-	public int deletePet(Long petId);
+	public void deletePet(Long petId);
 }

@@ -74,7 +74,7 @@
             "content": {}
           }
         },
-        "x-codegen-request-body-name": "body"
+        "x-codegen-request-body-name": "updateReqPayload"
       },
       "post": {
         "tags": [
@@ -104,7 +104,7 @@
             "content": {}
           }
         },
-        "x-codegen-request-body-name": "body"
+        "x-codegen-request-body-name": "petReqPayload"
       }
     },
     "/pet/findByStatus": {
@@ -164,60 +164,6 @@
             "content": {}
           }
         }
-      }
-    },
-    "/pet/findByTags": {
-      "get": {
-        "tags": [
-          "pet"
-        ],
-        "summary": "Finds Pets by tags",
-        "description": "Muliple tags can be provided with comma separated strings. Use         tag1, tag2, tag3 for testing.",
-        "operationId": "findPetsByTags",
-        "parameters": [
-          {
-            "name": "tags",
-            "in": "query",
-            "description": "Tags to filter by",
-            "required": true,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "successful operation",
-            "content": {
-              "application/xml": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Pet"
-                  }
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Pet"
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Invalid tag value",
-            "content": {}
-          }
-        },
-        "deprecated": true
       }
     },
     "/pet/{petId}": {
@@ -342,58 +288,6 @@
           "404": {
             "description": "Pet not found",
             "content": {}
-          }
-        }
-      }
-    },
-    "/pet/{petId}/uploadImage": {
-      "post": {
-        "tags": [
-          "pet"
-        ],
-        "summary": "uploads an image",
-        "operationId": "uploadFile",
-        "parameters": [
-          {
-            "name": "petId",
-            "in": "path",
-            "description": "ID of pet to update",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "multipart/form-data": {
-              "schema": {
-                "properties": {
-                  "additionalMetadata": {
-                    "type": "string",
-                    "description": "Additional data to pass to server"
-                  },
-                  "file": {
-                    "type": "string",
-                    "description": "file to upload",
-                    "format": "binary"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "successful operation",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiResponse"
-                }
-              }
-            }
           }
         }
       }
