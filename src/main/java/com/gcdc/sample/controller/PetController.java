@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,6 +24,8 @@ import org.springframework.web.context.request.NativeWebRequest;
 import com.gcdc.openapi.api.PetApiController;
 import com.gcdc.openapi.model.ModelApiResponse;
 import com.gcdc.openapi.model.Pet;
+import com.gcdc.sample.dao.model.Fare;
+import com.gcdc.sample.dao.model.TaxiRide;
 import com.gcdc.sample.service.PetService;
 
 import io.swagger.annotations.ApiParam;
@@ -114,6 +117,21 @@ public class PetController extends PetApiController {
 			@ApiParam(value = "Updated status of the pet") @Valid @RequestPart(value = "status", required = false) String status) {
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 
+	}
+	
+	
+	@GetMapping(value = "/taxi/distance/{distance}", consumes = {"application/json"})
+	public ResponseEntity<ModelApiResponse> calculateFare(@PathVariable(value = "distance") Long distance, @RequestParam(value = "surcharge") boolean surcharge) {
+		
+		TaxiRide taxiRide = new TaxiRide();
+		taxiRide.setDistanceInMile(distance);
+		taxiRide.setIsNightSurcharge(surcharge);
+		
+		Long totalFare = petService.calculateFare(taxiRide, new Fare());
+		
+		ModelApiResponse response = new ModelApiResponse().code(1).message("Total Fare : " + totalFare).type("DROOLS");
+		return new ResponseEntity<ModelApiResponse>(response, HttpStatus.OK);
+		
 	}
 
 	/**

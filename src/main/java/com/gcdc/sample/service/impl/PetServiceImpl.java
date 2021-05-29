@@ -3,6 +3,8 @@ package com.gcdc.sample.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.kie.api.runtime.KieContainer;
+import org.kie.api.runtime.KieSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -11,14 +13,19 @@ import com.gcdc.openapi.model.Pet;
 import com.gcdc.openapi.model.Pet.StatusEnum;
 import com.gcdc.openapi.model.Tag;
 import com.gcdc.sample.dao.PetDataAccessLayer;
+import com.gcdc.sample.dao.model.Fare;
+import com.gcdc.sample.dao.model.TaxiRide;
 import com.gcdc.sample.service.PetService;
 
 @Component
 public class PetServiceImpl implements PetService {
 
 	@Autowired
-	PetDataAccessLayer petDao;
+	private PetDataAccessLayer petDao;
 
+	@Autowired
+	private KieContainer kieContainer;
+	
 	@Override
 	public Pet getPet(Long id) {
 		com.gcdc.sample.dao.model.Pet petRow = petDao.getPetInformation(id);
@@ -101,6 +108,16 @@ public class PetServiceImpl implements PetService {
 
 		});
 		return pets;
+	}
+
+	@Override
+	public Long calculateFare(TaxiRide taxiRide, Fare rideFare) {
+		KieSession session = kieContainer.newKieSession();
+		session.setGlobal("rideFare", rideFare);
+		session.insert(taxiRide);
+		session.fireAllRules();
+		session.dispose();
+        return rideFare.getRideFare();
 	}
 
 }
