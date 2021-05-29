@@ -6,3 +6,4 @@ SpringJdbcTemplate
 RestController
 Drools
 H2 Database
+LDAP configuration using LDIF file
