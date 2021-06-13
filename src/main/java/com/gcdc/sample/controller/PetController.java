@@ -15,12 +15,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.NativeWebRequest;
 
-import com.gcdc.openapi.api.PetApiController;
 import com.gcdc.openapi.model.ModelApiResponse;
 import com.gcdc.openapi.model.Pet;
 import com.gcdc.sample.service.PetService;
@@ -28,7 +28,8 @@ import com.gcdc.sample.service.PetService;
 import io.swagger.annotations.ApiParam;
 
 @RestController
-public class PetController extends PetApiController {
+@RequestMapping("${petstore.base-path:}")
+public class PetController {
 
 	@Autowired
 	private PetService petService;
@@ -38,7 +39,6 @@ public class PetController extends PetApiController {
 	 * @param request
 	 */
 	public PetController(NativeWebRequest request) {
-		super(request);
 	}
 
 	/***
