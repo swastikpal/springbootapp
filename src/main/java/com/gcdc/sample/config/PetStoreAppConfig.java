@@ -16,7 +16,6 @@ public class PetStoreAppConfig implements WebMvcConfigurer {
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
 		registry.addInterceptor(petServiceInterceptor);
-		//WebMvcConfigurer.super.addInterceptors(registry);
 	}
 	
 }

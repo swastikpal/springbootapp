@@ -23,6 +23,7 @@ import org.springframework.web.context.request.NativeWebRequest;
 
 import com.gcdc.openapi.model.ModelApiResponse;
 import com.gcdc.openapi.model.Pet;
+import com.gcdc.sample.exception.PetException;
 import com.gcdc.sample.service.PetService;
 
 import io.swagger.annotations.ApiParam;
@@ -45,27 +46,25 @@ public class PetController {
 	 * 
 	 * @param body
 	 * @return
+	 * @throws PetException 
 	 */
 	@PostMapping(value = "/pet/add", consumes = { "application/json", "application/xml" })
 	public ResponseEntity<Void> addPet(@Valid @RequestBody(required = true) Pet payload) {
-		try {
-			petService.addPet(payload);
-		} catch (Exception e) {
-			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-		return new ResponseEntity<>(HttpStatus.OK);
+		petService.addPet(payload);
+		return ResponseEntity.ok().build();
 	}
 
 	/***
 	 * 
 	 * @param status
-	 * @return
+	 * @return {@code ResponseEntity}
 	 */
 	@GetMapping(value = "/pet/status", produces = { "application/xml", "application/json" })
 	public ResponseEntity<List<Pet>> findPetsByStatus(
 			@NotNull @Valid @RequestParam(value = "status", required = true) List<String> status) {
-		List<Pet> pets = petService.getPetByStatus(status.get(0));
-		return new ResponseEntity<>(pets, HttpStatus.OK);
+		List<Pet> pets = null;
+		pets = petService.getPetByStatus(status.get(0));
+		return ResponseEntity.ok(pets);
 	}
 
 	/***
@@ -75,10 +74,7 @@ public class PetController {
 	@GetMapping(value = "/pet/id/{petId}", produces = { "application/xml", "application/json" })
 	public ResponseEntity<Pet> getPetById(@PathVariable("petId") Long petId) {
 		Pet pet = petService.getPet(petId);
-		if (pet == null) {
-			return new ResponseEntity<Pet>(HttpStatus.NOT_FOUND);
-		}
-		return new ResponseEntity<>(pet, HttpStatus.OK);
+		return ResponseEntity.ok(pet);
 	}
 
 	/**
@@ -90,11 +86,7 @@ public class PetController {
 	@DeleteMapping(value = "/pet/delete/{petId}")
 	public ResponseEntity<Void> deletePet(@PathVariable("petId") Long petId,
 			@RequestHeader(value = "api_key", required = false) String apiKey) {
-		try {
-			petService.deletePet(petId);
-		} catch (Exception e) {
-			return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
-		}
+		petService.deletePet(petId);
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 

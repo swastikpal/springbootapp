@@ -17,7 +17,7 @@ public class PetServiceInterceptor implements HandlerInterceptor {
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
-
+		
 		log.info("[preHandle][" + request + "]" + "[" + request.getMethod() + "]" + request.getRequestURI());
 		return true;
 	}
@@ -26,14 +26,14 @@ public class PetServiceInterceptor implements HandlerInterceptor {
 	public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
 			ModelAndView modelAndView) throws Exception {
 		
-		log.info("[postHandle][" + request + "]");
+		log.info("[postHandle][" + request.getRequestURI() + "]");
 	}
 
 	@Override
 	public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex)
 			throws Exception {
 		
-		log.info("[afterCompletion][" + request + "][exception: " + ex + "]");
+		log.info("[afterCompletion][" + request.getRequestURI() + "][exception: " + (ex != null ? ex.getClass() : null) + "]");
 	}
 
 }

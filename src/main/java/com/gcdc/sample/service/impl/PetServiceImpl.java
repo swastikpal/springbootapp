@@ -11,6 +11,7 @@ import com.gcdc.openapi.model.Pet;
 import com.gcdc.openapi.model.Pet.StatusEnum;
 import com.gcdc.openapi.model.Tag;
 import com.gcdc.sample.dao.PetDataAccessLayer;
+import com.gcdc.sample.exception.PetException;
 import com.gcdc.sample.service.PetService;
 
 @Component
@@ -20,8 +21,14 @@ public class PetServiceImpl implements PetService {
 	PetDataAccessLayer petDao;
 
 	@Override
-	public Pet getPet(Long id) {
-		com.gcdc.sample.dao.model.Pet petRow = petDao.getPetInformation(id);
+	public Pet getPet(Long id) throws PetException {
+		com.gcdc.sample.dao.model.Pet petRow = null;
+		
+		try {
+			petRow = petDao.getPetInformation(id);
+		} catch (PetException pe) {
+			throw pe;
+		}
 		Pet responsePet = null;
 		if (petRow != null) {
 			responsePet = convertToPetVO(petRow);
@@ -30,15 +37,20 @@ public class PetServiceImpl implements PetService {
 	}
 
 	@Override
-	public List<Pet> getPetByStatus(String status) {
+	public List<Pet> getPetByStatus(String status) throws PetException {
 		List<Pet> pets = new ArrayList<Pet>();
-		pets = convertToPetVOList(petDao.getPetbyStatus(status));
+		try {
+			List<com.gcdc.sample.dao.model.Pet> petList = petDao.getPetbyStatus(status);
+			pets = convertToPetVOList(petList);
+		} catch (PetException pe) {
+			throw pe;
+		}
 
 		return pets;
 	}
 
 	@Override
-	public void addPet(Pet pet) throws Exception {
+	public void addPet(Pet pet) throws PetException {
 		petDao.save(convertToPetDTO(pet));
 	}
 
@@ -48,10 +60,10 @@ public class PetServiceImpl implements PetService {
 	}
 
 	@Override
-	public void deletePet(Long petId) {
+	public void deletePet(Long petId) throws PetException {
 		try {
 			petDao.deletePet(petId);
-		} catch (Exception e) {
+		} catch (PetException e) {
 			throw e;
 		}
 		

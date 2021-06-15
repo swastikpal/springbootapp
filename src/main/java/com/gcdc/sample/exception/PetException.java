@@ -1,6 +1,6 @@
 package com.gcdc.sample.exception;
 
-public class PetException extends Throwable {
+public class PetException extends RuntimeException {
 
 	/**
 	 * 
